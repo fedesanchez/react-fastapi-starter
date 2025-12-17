@@ -6,9 +6,7 @@ import {Outlet} from 'react-router-dom'
 function Layout() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
         <Outlet />  
-      </div>
     </ThemeProvider>  
   )
 }
