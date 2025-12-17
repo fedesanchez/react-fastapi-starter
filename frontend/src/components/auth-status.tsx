@@ -20,14 +20,13 @@ export function AuthStatus() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {isAuthenticated ? (
-          <div className="text-zinc-400">Loading...</div>
-        ) : user ? (
+        { isAuthenticated ? ( 
+          user ? (
           <div className="space-y-4">
             <div className="p-4 bg-zinc-800 rounded-lg">
-              <h3 className="font-semibold text-white mb-2">User Info</h3>
+              <h3 className="font-semibold text-white mb-2">User Info (store)</h3>
               <p className="text-zinc-300">Email: {user.email}</p>
-              <p className="text-zinc-300">Name: {user.name}</p>
+              <p className="text-zinc-300">Name: {user.lastName}, {user.firstName}</p>
               <p className="text-zinc-300">ID: {user.id}</p>
             </div>
             <Button
@@ -38,7 +37,10 @@ export function AuthStatus() {
               Sign Out
             </Button>
           </div>
-        ) : (
+          ) : (
+          <div className="text-zinc-400">Loading...</div>
+          )
+        ): (
           <div className="space-y-3">
             <Link to="/auth/login" className="block">
               <Button className="w-full bg-white text-zinc-900 hover:bg-zinc-100">

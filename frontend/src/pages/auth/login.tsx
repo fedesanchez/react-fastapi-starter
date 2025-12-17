@@ -20,9 +20,8 @@ export default function LoginPage() {
     setError("")
 
     try {
-      console.log("entro")
       
-      const { login, error } = useStore.getState()
+      const { login } = useStore.getState()
       const data = {
         grant_type: 'password',
         scope: '',
@@ -33,7 +32,6 @@ export default function LoginPage() {
       await login(data)
       navigate("/")
     } catch {
-       //setError(error)
       setError("Invalid email or password. Please try again.")
     } finally {
       setLoading(false)

@@ -1,7 +1,6 @@
 
 import { useState } from "react"
-//import { authClient } from "@/lib/auth-client"
-//import { goApiClient } from "@/lib/go-api-client"
+import { Api } from "@/api/Api"
 import useStore from "@/store/useStore"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,15 +14,13 @@ export function APITest() {
     setApiLoading(true)
     setApiResponse("")
 
-    const response = await fetch("/api/me")
-      .then(x => x.json())
-      .then(x => ({data: x}))
+    const response = await Api.get("/api/v1/users/me")
       .catch(e => ({error: e}))
 
     if (response.error) {
       setApiResponse(`❌ API Error: ${response.error}`)
     } else {
-      setApiResponse(`✅ API Success: ${JSON.stringify(response.data, null, 2)}`)
+      setApiResponse(`✅ API Success: ${JSON.stringify(response, null, 2)}`)
     }
 
     setApiLoading(false)
@@ -43,7 +40,7 @@ export function APITest() {
           disabled={!user || apiLoading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white"
         >
-          {apiLoading ? "Testing..." : "Test Go API"}
+          {apiLoading ? "Testing..." : "Test API"}
         </Button>
 
         {!user && (
