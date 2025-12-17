@@ -29,6 +29,7 @@ What's included in the template?
 - run `uvicorn src.main:app --reload`
 
 # How to create a migration file.
+- Run `alembic revision --autogenerate`
 - Run `alembic revision -m "create some table"`
 
 # How to apply migration changes: 
