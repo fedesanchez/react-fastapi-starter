@@ -1,16 +1,14 @@
 import { create } from 'zustand'
 import type { StoreState } from '@/types/store'
-
-import type { LoginFormInput } from '@/components/forms/login/LoginFormInput'
-import type { RegisterFormInput } from '@/components/forms/register/RegisterFormInput'
+import type { LoginFormValues, SigninFormValues } from "@/types/auth.types"
 import {
   registerUser,
   authenticateUser,
   logoutUser,
   getUserData,
   refreshAccessToken,
-} from '@/api/auth.api'
-import { ApiError } from '@/api/Api'
+} from '@/services/auth.service'
+import ApiError from '@/errors/ApiError'
 
 const initialState: StoreState = {
   loading: false,
@@ -44,7 +42,7 @@ const useStore = create<StoreState>((set, get) => ({
     })
   },
 
-  register: async (formData: RegisterFormInput) => {
+  register: async (formData: SigninFormValues) => {
     set({ loading: true, error: null })
     try {
       await registerUser(formData)
@@ -59,7 +57,7 @@ const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  login: async (formData: LoginFormInput) => {
+  login: async (formData: LoginFormValues) => {
     set({ loading: true, error: null })
     try {
       const resp = await authenticateUser(formData)

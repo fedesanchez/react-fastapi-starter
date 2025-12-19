@@ -3,9 +3,9 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from '@/layouts/layout'
 
-import IndexPage from '@/pages/index'
-import LoginPage from '@/pages/auth/login'
-import SignupPage from '@/pages/auth/signup'
+import IndexPage from '@/pages/index-page'
+import LoginPage from '@/pages/auth/login-page'
+import SignupPage from '@/pages/auth/signup-page'
 
 function App() {
   return (

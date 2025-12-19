@@ -1,5 +1,7 @@
-
+import * as z from "zod"
 import { useState } from "react"
+import { signinSchema } from "@/schemas/auth.schema"
+import ApiError from "@/errors/ApiError"
 import useStore from "@/store/useStore"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
@@ -24,11 +26,19 @@ export default function SignUpPage() {
     try {
      // Redirect to dashboard or login page
       const { register } = useStore.getState()
-      const data = {first_name, last_name, email, password, password_confirm}
-      await register(data)
-      navigate("/auth/login")
-    } catch {
-      setError("Failed to create account. Please try again.")
+      const formData = signinSchema.safeParse({first_name, last_name, email, password, password_confirm})
+      if (!formData.success) {
+        setError(z.prettifyError(formData.error))   // ZodError instance
+      } else {
+        await register(formData.data)
+        navigate("/auth/login")
+      }
+    } catch(err) {
+      if (err instanceof ApiError){
+        setError(err.message)
+      } else{
+        setError("Failed to create account. Please try again.")
+      }
     } finally {
       setLoading(false)
     }

@@ -1,17 +1,6 @@
 import type { FetchParams, FetchOptions } from '@/types/api'
 import useStore from '@/store/useStore'
-
-export class ApiError extends Error {
-  public status: number
-  public details: any
-
-  constructor(status: number, details: any, message?: string) {
-    super(message || `API Error: ${status}`)
-    this.status = status
-    this.details = details
-    this.name = 'ApiError'
-  }
-}
+import ApiError from "@/errors/ApiError"
 
 export class Api {
   /**

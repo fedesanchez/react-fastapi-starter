@@ -1,6 +1,22 @@
 import { z } from 'zod'
 
-export const RegisterFormSchema = z
+export const profileResponseSchema = z.object({
+  id: z.number().int(),
+  first_name: z.string(),
+  last_name: z.string(),
+  email: z.string(),
+})
+
+export const loginSchema = z.object({
+  grant_type: z.string(),
+  scope: z.string(),
+  client_id: z.string(),
+  client_secret: z.string(),
+  username: z.string().email('Invalid email format.'),
+  password: z.string().min(8, 'Password needs to have at least 8 characters.'),
+})
+
+export const signinSchema = z
   .object({
     first_name: z
       .string()
@@ -25,3 +41,11 @@ export const RegisterFormSchema = z
     message: 'Passwords dont match.',
     path: ['password_confirm'],
   })
+
+export const loginResponseSchema = z.object({
+  access_token: z.string().nonempty(),
+  token_type: z.string().nonempty(),
+})
+
+
+
