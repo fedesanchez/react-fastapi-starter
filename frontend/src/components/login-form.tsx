@@ -1,34 +1,50 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import useStore from "@/store/useStore"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {Link, useNavigate } from "react-router-dom"
+import { loginSchema } from "@/schemas/auth.schema"
+import type { LoginFormValues } from "@/types/auth.types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
+import {
+  InputGroup,
+} from "@/components/ui/input-group"
 
 export default function LoginForm() {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
 
   const navigate = useNavigate()
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-
-    try {
-      
-      const { login } = useStore.getState()
-      const data = {
+  const [loading, setLoading] = useState(false)
+  const defaultValues = {
         grant_type: 'password',
         scope: '',
         client_id: '',
         client_secret: '',
-        username, password
-      }
+        username: '',
+        password: '',
+  };
+  const [error, setError] = useState<string>("")
+  
+  const form = useForm<z.infer<typeof loginSchema>>({
+      resolver: zodResolver(loginSchema),
+      defaultValues
+  })
+  
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+    setLoading(true)
+    setError("")
+
+    try {      
+      const { login } = useStore.getState()
       await login(data)
       navigate("/")
     } catch {
@@ -49,38 +65,71 @@ export default function LoginForm() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Input
-                  type="username"
-                  placeholder="Email"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-400 focus:border-zinc-600 focus:ring-zinc-600"
+            <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
+              
+              <FieldGroup>
+                <Controller
+                  name="username"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="login-form-username">
+                        Email
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="login-form-username"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="me@example.com"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
                 />
-              </div>
-              <div className="space-y-2">
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-400 focus:border-zinc-600 focus:ring-zinc-600"
+
+                <Controller
+                  name="password"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="login-form-password">
+                        Password
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        type="password"
+                        id="login-form-password"
+                        aria-invalid={fieldState.invalid}
+                        placeholder=""
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
                 />
-              </div>
+              </FieldGroup>
+                  
+            </form>
+            <div className="mt-6">
               {error && (
                 <div className="text-red-400 text-sm text-center">{error}</div>
               )}
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Field>
+
               <Button
                 type="submit"
                 disabled={loading}
+                form="login-form"
                 className="w-full bg-white text-zinc-900 hover:bg-zinc-100 font-medium"
               >
                 {loading ? "Signing In..." : "Sign In"}
               </Button>
-            </form>
 
             <div className="mt-6 text-center">
               <p className="text-zinc-400 text-sm">
@@ -90,7 +139,8 @@ export default function LoginForm() {
                 </Link>
               </p>
             </div>
-          </CardContent>
+            </Field>
+          </CardFooter>
         </Card>
       </div>
     </div>
