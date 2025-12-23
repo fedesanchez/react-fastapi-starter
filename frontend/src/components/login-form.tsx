@@ -1,72 +1,75 @@
-
-import { useState, useEffect } from "react"
-import useStore from "@/store/useStore"
-import { Controller, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {Link, useNavigate } from "react-router-dom"
-import { loginSchema } from "@/schemas/auth.schema"
-import type { LoginFormValues } from "@/types/auth.types"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useEffect } from "react";
+import useStore from "@/store/useStore";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useNavigate } from "react-router-dom";
+import { loginSchema } from "@/schemas/auth.schema";
+import type { LoginFormValues } from "@/types/auth.types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import {
-  InputGroup,
-} from "@/components/ui/input-group"
+} from "@/components/ui/field";
 
 export default function LoginForm() {
-
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const defaultValues = {
-        grant_type: 'password',
-        scope: '',
-        client_id: '',
-        client_secret: '',
-        username: '',
-        password: '',
+    grant_type: "password",
+    scope: "",
+    client_id: "",
+    client_secret: "",
+    username: "",
+    password: "",
   };
-  const [error, setError] = useState<string>("")
-  
-  const form = useForm<z.infer<typeof loginSchema>>({
-      resolver: zodResolver(loginSchema),
-      defaultValues
-  })
-  
-  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
-    setLoading(true)
-    setError("")
+  const [error, setError] = useState<string>("");
 
-    try {      
-      const { login } = useStore.getState()
-      await login(data)
-      navigate("/")
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues,
+  });
+
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { login } = useStore.getState();
+      await login(data);
+      navigate("/");
     } catch {
-      setError("Invalid email or password. Please try again.")
+      setError("Invalid email or password. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <Card className="bg-zinc-900 border-zinc-800 shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-white">
+              Welcome Back
+            </CardTitle>
             <CardDescription className="text-zinc-400">
               Sign in to your account to continue
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
-              
               <FieldGroup>
                 <Controller
                   name="username"
@@ -111,7 +114,6 @@ export default function LoginForm() {
                   )}
                 />
               </FieldGroup>
-                  
             </form>
             <div className="mt-6">
               {error && (
@@ -121,7 +123,6 @@ export default function LoginForm() {
           </CardContent>
           <CardFooter>
             <Field>
-
               <Button
                 type="submit"
                 disabled={loading}
@@ -131,18 +132,21 @@ export default function LoginForm() {
                 {loading ? "Signing In..." : "Sign In"}
               </Button>
 
-            <div className="mt-6 text-center">
-              <p className="text-zinc-400 text-sm">
-                Don&apos;t have an account?{" "}
-                <Link to="/auth/signup" className="text-white hover:underline font-medium">
-                  Create one
-                </Link>
-              </p>
-            </div>
+              <div className="mt-6 text-center">
+                <p className="text-zinc-400 text-sm">
+                  Don&apos;t have an account?{" "}
+                  <Link
+                    to="/auth/signup"
+                    className="text-white hover:underline font-medium"
+                  >
+                    Create one
+                  </Link>
+                </p>
+              </div>
             </Field>
           </CardFooter>
         </Card>
       </div>
     </div>
-  )
+  );
 }

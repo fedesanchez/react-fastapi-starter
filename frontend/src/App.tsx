@@ -1,11 +1,9 @@
+import { Routes, Route } from "react-router-dom";
+import Layout from "@/layouts/layout";
 
-
-import { Routes, Route } from 'react-router-dom'
-import Layout from '@/layouts/layout'
-
-import IndexPage from '@/pages/index-page'
-import LoginPage from '@/pages/auth/login-page'
-import SignupPage from '@/pages/auth/signup-page'
+import IndexPage from "@/pages/index-page";
+import LoginPage from "@/pages/auth/login-page";
+import SignupPage from "@/pages/auth/signup-page";
 
 function App() {
   return (
@@ -18,7 +16,7 @@ function App() {
         <Route path="signup" element={<SignupPage />} />
       </Route>
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

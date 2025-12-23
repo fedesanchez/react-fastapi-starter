@@ -1,10 +1,16 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { AuthStatus } from "@/components/auth-status"
-import { APITest } from "@/components/api-test"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AuthStatus } from "@/components/auth-status";
+import { APITest } from "@/components/api-test";
 
 export default function IndexPage() {
   return (
-<div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen bg-zinc-950 text-white">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
@@ -15,8 +21,8 @@ export default function IndexPage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            <AuthStatus/>
-            <APITest/>
+            <AuthStatus />
+            <APITest />
           </div>
 
           <div className="mt-8 text-center">
@@ -32,7 +38,9 @@ export default function IndexPage() {
                   <div className="text-center">
                     <div className="text-2xl mb-2">🔐</div>
                     <h3 className="font-semibold text-white">Sign Up</h3>
-                    <p className="text-zinc-400 text-sm">Create a new account</p>
+                    <p className="text-zinc-400 text-sm">
+                      Create a new account
+                    </p>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">🔑</div>
@@ -42,7 +50,9 @@ export default function IndexPage() {
                   <div className="text-center">
                     <div className="text-2xl mb-2">🚀</div>
                     <h3 className="font-semibold text-white">Test API</h3>
-                    <p className="text-zinc-400 text-sm">Verify with Api server</p>
+                    <p className="text-zinc-400 text-sm">
+                      Verify with Api server
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -51,6 +61,5 @@ export default function IndexPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

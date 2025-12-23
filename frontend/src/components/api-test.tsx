@@ -1,30 +1,36 @@
-
-import { useState } from "react"
-import { Api } from "@/services/Api"
-import useStore from "@/store/useStore"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react";
+import { Api } from "@/services/Api";
+import useStore from "@/store/useStore";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export function APITest() {
-  const { user } = useStore()
-  const [apiResponse, setApiResponse] = useState<string>("")
-  const [apiLoading, setApiLoading] = useState(false)
+  const { user } = useStore();
+  const [apiResponse, setApiResponse] = useState<string>("");
+  const [apiLoading, setApiLoading] = useState(false);
 
   const testAPI = async () => {
-    setApiLoading(true)
-    setApiResponse("")
+    setApiLoading(true);
+    setApiResponse("");
 
-    const response = await Api.get("/api/v1/users/me")
-      .catch(e => ({error: e}))
+    const response = await Api.get("/api/v1/users/me").catch((e) => ({
+      error: e,
+    }));
 
     if (response.error) {
-      setApiResponse(`❌ API Error: ${response.error}`)
+      setApiResponse(`❌ API Error: ${response.error}`);
     } else {
-      setApiResponse(`✅ API Success: ${JSON.stringify(response, null, 2)}`)
+      setApiResponse(`✅ API Success: ${JSON.stringify(response, null, 2)}`);
     }
 
-    setApiLoading(false)
-  }
+    setApiLoading(false);
+  };
 
   return (
     <Card className="bg-zinc-900 border-zinc-800">
@@ -44,9 +50,7 @@ export function APITest() {
         </Button>
 
         {!user && (
-          <p className="text-zinc-400 text-sm">
-            Sign in to test the API
-          </p>
+          <p className="text-zinc-400 text-sm">Sign in to test the API</p>
         )}
 
         {apiResponse && (
@@ -59,5 +63,5 @@ export function APITest() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

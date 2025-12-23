@@ -1,12 +1,16 @@
-import { Api } from '@/services/Api'
-import ApiError from "@/errors/ApiError"
-import ValidationError from "@/errors/ValidationError"
-import type { LoginResponse, ProfileResponse, SigninFormValues, LoginFormValues} from '@/types/auth'
+import { Api } from "@/services/Api";
+import ApiError from "@/errors/ApiError";
+import type {
+  LoginResponse,
+  ProfileResponse,
+  SigninFormValues,
+  LoginFormValues,
+} from "@/types/auth";
 import {
   loginResponseSchema,
   profileResponseSchema,
-} from '@/schemas/auth.schema'
-import type { FetchOptions } from '@/types/api'
+} from "@/schemas/auth.schema";
+import type { FetchOptions } from "@/types/api";
 
 /**
  * Creates a new user.
@@ -16,8 +20,8 @@ import type { FetchOptions } from '@/types/api'
  * @throws {Error} Si hay un error durante el proceso de creación.
  */
 export const registerUser = async (data: SigninFormValues): Promise<void> => {
-  await Api.post('/api/v1/auth/register', data)
-}
+  await Api.post("/api/v1/auth/register", data);
+};
 
 /**
  * Get user info.
@@ -26,10 +30,10 @@ export const registerUser = async (data: SigninFormValues): Promise<void> => {
  * @throws {Error} If any error.
  */
 export const getUserData = async (): Promise<ProfileResponse> => {
-  const data = await Api.get('/api/v1/users/me')
-  const validatedData = profileResponseSchema.parse(data)
-  return validatedData
-}
+  const data = await Api.get("/api/v1/users/me");
+  const validatedData = profileResponseSchema.parse(data);
+  return validatedData;
+};
 
 /**
  * Login a user.
@@ -45,43 +49,43 @@ export const authenticateUser = async (
     return new URLSearchParams(
       Object.keys(data).reduce(
         (acc, key) => {
-          acc[key] = String(data[key])
-          return acc
+          acc[key] = String(data[key]);
+          return acc;
         },
         {} as Record<string, string>,
       ),
-    ).toString()
-  }
+    ).toString();
+  };
   const options: FetchOptions = {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     body: toUrlEncoded(body),
-  }
+  };
 
   try {
-    const url = Api.buildUrl('/api/v1/auth/login')
-    const response = await fetch(url, options)
+    const url = Api.buildUrl("/api/v1/auth/login");
+    const response = await fetch(url, options);
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null)
-      const defaultMessage = `API Error: ${response.status} (${response.statusText})`
+      const errorData = await response.json().catch(() => null);
+      const defaultMessage = `API Error: ${response.status} (${response.statusText})`;
       const errorMessage = errorData?.detail
-        ? typeof errorData.detail === 'string'
+        ? typeof errorData.detail === "string"
           ? errorData.detail
           : defaultMessage
-        : defaultMessage
+        : defaultMessage;
 
-      throw new ApiError(response.status, errorData, errorMessage)
+      throw new ApiError(response.status, errorData, errorMessage);
     }
-    const json = await response.json().catch(() => null)
-    const validatedData = loginResponseSchema.parse(json)
-    return validatedData
+    const json = await response.json().catch(() => null);
+    const validatedData = loginResponseSchema.parse(json);
+    return validatedData;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 /**
  * Logout user.
@@ -90,8 +94,8 @@ export const authenticateUser = async (
  * @throws {Error} If any error.
  */
 export const logoutUser = async (): Promise<void> => {
-  await Api.post('/api/v1/auth/logout')
-}
+  await Api.post("/api/v1/auth/logout");
+};
 
 /**
  * Refresh access token
@@ -99,11 +103,11 @@ export const logoutUser = async (): Promise<void> => {
  * @throws {Error}
  */
 export const refreshAccessToken = async (): Promise<LoginResponse> => {
-  const url = Api.buildUrl('/api/v1/auth/refresh-token')
-  const response = await fetch(url, { method: 'POST', credentials: 'include' })
+  const url = Api.buildUrl("/api/v1/auth/refresh-token");
+  const response = await fetch(url, { method: "POST", credentials: "include" });
   if (response.ok) {
-    return response.json()
+    return response.json();
   } else {
-    throw 'Unable to refresh-token.'
+    throw "Unable to refresh-token.";
   }
-}
+};

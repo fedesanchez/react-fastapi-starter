@@ -1,7 +1,7 @@
 export interface FetchParams {
-  [key: string]: string | number | boolean
+  [key: string]: string | number | boolean;
 }
 
 export interface FetchOptions extends RequestInit {
-  headers?: Record<string, string>
+  headers?: Record<string, string>;
 }
