@@ -120,7 +120,7 @@ cd frontend
 2. **Install dependencies:**
 
 ```bash
-npm install
+pnpm install
 
 ```
 
@@ -135,7 +135,7 @@ VITE_API_URL=http://localhost:8000
 4. **Run the app:**
 
 ```bash
-npm run dev
+pnpm run dev
 
 ```
 
